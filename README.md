@@ -10,6 +10,6 @@ In addition, a search function should allow the user to find books by keyword.
 
 # To run the project
 
-It's simple Maven application so you can open it in your IDE then build it. 
+It's simple Maven application so you can open it in your IDE then update it with Maven. 
 
 After that you can run the main entry class that's called "BooksLibraryApplication" 
