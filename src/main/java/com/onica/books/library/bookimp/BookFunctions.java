@@ -115,7 +115,7 @@ public class BookFunctions {
 
 			displayAllBooks();
 
-			repeatBookFuncation("\n To view details enter the book ID, to return press <Enter>.", VIEW_BOOK_DETAILS);
+			repeatBookFuncation("\n To view details enter the book ID, to return press <Enter>.", VIEW_BOOK_DETAILS, 0);
 
 		}
 	}
@@ -177,7 +177,7 @@ public class BookFunctions {
 
 		} else {
 
-			findBookFunction(keyword);
+			findBookFunction(keyword.toLowerCase());
 
 		}
 
@@ -185,27 +185,26 @@ public class BookFunctions {
 
 	void findBookFunction(String keyword) {
 
-		boolean isFounded = false;
+		int bookId = 0;
 
 		for (Book book : allBooks) {
 
 			if (book.toString().toLowerCase().contains(keyword)) {
 
-				isFounded = true;
-
+				bookId = book.getId();
 				System.out.println(
 						"\n The following books matched your query. Enter the book ID to see more details, or <Enter> to return.\n");
 
-				System.out.println("	[" + book.getId() + "] " + book.getTitle());
+				System.out.println("	[" + bookId + "] " + book.getTitle());
 
 				break;
 			}
 
 		}
 
-		if (isFounded) {
+		if (bookId != 0) {
 
-			repeatBookFuncation("", FIND_BOOK);
+			repeatBookFuncation("", FIND_BOOK, bookId);
 
 		} else {
 
@@ -228,12 +227,12 @@ public class BookFunctions {
 	 * @param bookId
 	 */
 	void mainEditBook() {
-		
+
 		System.out.println();
 		displayAllBooks();
 
-		repeatBookFuncation("\n Enter the book ID of the book you want to edit; to return press <Enter>. \n",
-				EDIT_BOOK);
+		repeatBookFuncation("\n Enter the book ID of the book you want to edit; to return press <Enter>. \n", EDIT_BOOK,
+				0);
 	}
 
 	void editBookProcess(int bookId) {
@@ -275,7 +274,7 @@ public class BookFunctions {
 			book.setDescription(description);
 		}
 
-		System.out.println("Book saved.\n");
+		System.out.println("\n Book saved.\n");
 
 	}
 
@@ -285,9 +284,10 @@ public class BookFunctions {
 	 */
 	void saveAndExit() {
 
-		System.out.println("\n Library saved.");
+		if (CSVBookUtil.writeAllBooksToCSV(allBooks)) {
 
-		CSVBookUtil.writeAllBooksToCSV(allBooks);
+			System.out.println("\n Library saved.");
+		}
 
 		scanner.close();
 	}
@@ -301,7 +301,7 @@ public class BookFunctions {
 	 * @param funcationType
 	 * @throws java.lang.NumberFormatException
 	 */
-	void repeatBookFuncation(String displayedMessage, String funcationType) {
+	void repeatBookFuncation(String displayedMessage, String funcationType, int foundedBookId) {
 
 		System.out.println(displayedMessage);
 
@@ -319,20 +319,27 @@ public class BookFunctions {
 					editBookProcess(bookId);
 
 					repeatBookFuncation("\n Enter the book ID of the book you want to edit; to return press <Enter>.",
-							EDIT_BOOK);
+							EDIT_BOOK, 0);
 
 				} else if (funcationType.equals(VIEW_BOOK_DETAILS)) {
 
 					viewBookDetails(allBooks.get(bookId - 1));
 
 					repeatBookFuncation("\n To view details enter the book ID, to return press <Enter>.",
-							VIEW_BOOK_DETAILS);
+							VIEW_BOOK_DETAILS, 0);
 
 				} else if (funcationType.equals(FIND_BOOK)) {
 
-					viewBookDetails(allBooks.get(bookId - 1));
+					if (foundedBookId == bookId) {
+						viewBookDetails(allBooks.get(bookId - 1));
+						mainFindBook();
+					} else {
+						System.out.println(
+								"\n The Book ID not matched with your search, Please type the correct ID that displyed for your search.");
 
-					mainFindBook();
+						repeatBookFuncation("", FIND_BOOK, foundedBookId);
+
+					}
 
 				}
 

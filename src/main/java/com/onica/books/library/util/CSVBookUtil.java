@@ -94,7 +94,13 @@ public class CSVBookUtil {
 	 * 
 	 * @throws java.io.IOException
 	 */
-	public static void writeAllBooksToCSV(List<Book> books) {
+	public static boolean writeAllBooksToCSV(List<Book> books) {
+
+		// to avoid the problem that may be happened if the book CSV file is deleted during application running.
+		if (!isFileFound()) {
+
+			return false;
+		}
 
 		FileWriter csvWriter;
 
@@ -135,6 +141,7 @@ public class CSVBookUtil {
 			System.out.println(ex.getMessage());
 		}
 
+		return true;
 	}
 
 	/**
