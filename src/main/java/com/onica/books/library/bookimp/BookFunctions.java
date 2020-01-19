@@ -166,8 +166,8 @@ public class BookFunctions {
 	 */
 	void mainFindBook() {
 
-		System.out.print("\n Search for a book  \n"
-				+ "\n Type in one or more keywords to search for, or <Enter> to return \n\n " + "Search ");
+		System.out.print("\n ==== Search ==== \n"
+				+ "\n Type in one or more keywords to search for, or <Enter> to return \n\n " + "Search: ");
 
 		String keyword = new Scanner(System.in).nextLine();
 
@@ -228,7 +228,7 @@ public class BookFunctions {
 	 */
 	void mainEditBook() {
 
-		System.out.println();
+ 		System.out.println("\n ==== Edit a Book ==== \n");
 		displayAllBooks();
 
 		repeatBookFuncation("\n Enter the book ID of the book you want to edit; to return press <Enter>. \n", EDIT_BOOK,
